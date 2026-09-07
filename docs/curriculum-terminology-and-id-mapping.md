@@ -62,112 +62,27 @@ The single queryable source of truth for the curriculum is the `curriculumLevels
 | `stage` / `class_band` | `string` | Yes | Educational stage (`Bal Vatika 1`, `Bal Vatika 2`, `Bal Vatika 3`, `Class 1`, `Class 2`, `Class 3`, `Class 4`). |
 | `primarySkills` | `string[]` | Yes | Array of canonical skill identifiers assessed by this concept. |
 | `subskills` | `string[]` | Yes | Granular micro-skills under primary skills. |
-| `legacyLevel59` | `integer \| null` | Optional | Migration bridge pointing to the legacy 59-level worksheet generator ID. |
+| `legacyLevel59` | `integer \| null` | Optional | Deprecated legacy bridge for procedural generators (1–21); modern question items resolve via question-level concept tagging (#423). |
 | `status` | `enum` | Yes | Lifecycle status: `active` \| `draft` \| `deprecated`. |
 | `hasStaticHtml` | `boolean` | Yes | Recomputed flag: indicates if static HTML worksheet templates exist on disk. |
 | `hasBuilder` | `boolean` | Yes | Recomputed flag: indicates if the legacy generator engine can build this level. |
 
 ---
 
-## 4. Consolidated Migration Table: 93 Levels, S-Codes & Legacy 59 Mapping
+## 4. Legacy Content Transition: Question-Level Concept Tagging (#423)
 
-Below is the canonical mapping crosswalk reconciling the 93 active curriculum nodes, their research S-codes, educational stages, capabilities, and the legacy 59-level worksheet engine IDs:
+### Superseding the Level-to-Level Crosswalk Approach
+Earlier attempts to reconcile legacy 59-level content with the 93-level curriculum relied on an automated level-to-level mapping (`Research/fln_59_to_93_crosswalk.PROPOSED.json`). That approach was officially retired and superseded on 2026-09-01 (via PR [#423](https://github.com/vicharanashala/fln/pull/423)) for two fundamental reasons:
+1. **Unreliable Automated Matching**: Title-only matching produced severe pedagogical errors (e.g. legacy level 4 *"Numbers 1-10"* erroneously matched to L43 *"3-Digit Numbers"*).
+2. **1-to-Many Pedagogical Overlaps**: Multiple 93-space levels legitimately draw from the same legacy level tasks rather than conforming to clean 1:1 level mappings. Attempting to force a rigid sequential crosswalk obscured this reality.
 
-| Level | S-Code | Educational Stage | Capability Title | Strand | Legacy 59 ID (Bridge) |
-|---|---|---|---|---|---|
-| **L1** | `S1.1` | Bal Vatika 1 | One-to-One Correspondence | Number Sense | Mapped (Ref: #408) |
-| **L2** | `S1.2` | Bal Vatika 1 | Classification (Single Property) | Pre-Math / Logic | Mapped |
-| **L3** | `S1.3` | Bal Vatika 1 | Perceptual Same/Different | Pre-Math / Logic | Mapped |
-| **L4** | `S1.4` | Bal Vatika 1 | Rote Verbal Counting to 10 | Number Sense | Mapped |
-| **L5** | `S1.5` | Bal Vatika 1 | Counting Small Sets (1-3) | Number Sense | Mapped |
-| **L6** | `S1.6` | Bal Vatika 1 | Shape Matching (Perceptual) | Geometry | Mapped |
-| **L7** | `S1.7` | Bal Vatika 1 | Perceptual Subitizing | Number Sense | Mapped |
-| **L8** | `S2.1` | Bal Vatika 2 | Quantity Comparison | Number Sense | Mapped |
-| **L9** | `S2.2` | Bal Vatika 2 | Seriation (3 Objects) | Measurement | Mapped |
-| **L10** | `S2.3` | Bal Vatika 2 | Classification (Increasing Complexity) | Pre-Math / Logic | Mapped |
-| **L11** | `S2.4` | Bal Vatika 2 | Counting to 5 (Cardinality) | Number Sense | Mapped |
-| **L12** | `S2.5` | Bal Vatika 2 | Counting 6-10 | Number Sense | Mapped |
-| **L13** | `S2.6` | Bal Vatika 2 | Shape Identification | Geometry | Mapped |
-| **L14** | `S2.7` | Bal Vatika 2 | 2-Item Patterns | Patterns | Mapped |
-| **L15** | `S2.8` | Bal Vatika 2 | Comparative Vocabulary | Measurement | Mapped |
-| **L16** | `S2.9` | Bal Vatika 2 | Conceptual Subitizing | Number Sense | Mapped |
-| **L17** | `S2.10` | Bal Vatika 2 | Basic Shape Composition | Geometry | Mapped |
-| **L18** | `S3.1` | Bal Vatika 3 | Numeral Recognition (1-10) | Number Sense | Mapped |
-| **L19** | `S3.2` | Bal Vatika 3 | Numeral-Quantity Correspondence | Number Sense | Mapped |
-| **L20** | `S3.3` | Bal Vatika 3 | Numeral Comparison (Object-Mediated) | Number Sense | Mapped |
-| **L21** | `S3.4` | Bal Vatika 3 | Seriation with Transitivity | Measurement | Mapped |
-| **L22** | `S3.5` | Bal Vatika 3 | Flexible Classification | Pre-Math / Logic | Level 22 |
-| **L23** | `S3.6` | Bal Vatika 3 | Numeral Sequencing | Number Sense | Level 23 |
-| **L24** | `S3.7` | Bal Vatika 3 | Comparative Vocabulary (Formalizing) | Measurement | Level 24 |
-| **L25** | `S3.8` | Bal Vatika 3 | Patterns (2-Item Indep & 3-Item Intro) | Patterns | Level 25 |
-| **L26** | `S3.9` | Bal Vatika 3 | Basic Shape Properties | Geometry | Level 26 |
-| **L27** | `S3.10` | Bal Vatika 3 | Shape Composition & Decomposition | Geometry | Level 27 |
-| **L28** | `S4.1` | Class 1 | Abstract Numeral Comparison | Number Sense | Level 28 |
-| **L29** | `S4.2` | Class 1 | Close Numeral Comparison | Number Sense | Level 29 |
-| **L30** | `S4.3` | Class 1 | Counting Objects to 20 | Number Sense | Level 30 |
-| **L31** | `S4.4` | Class 1 | Reading & Writing Numerals to 99 | Number Sense | Level 31 |
-| **L32** | `S4.5` | Class 1 | Structured Ten-Frames | Number Sense | Level 32 |
-| **L33** | `S4.6` | Class 1 | Unitizing (Bundles of 10) | Number Sense | Level 33 |
-| **L34** | `S4.7` | Class 1 | Place Value Identification (Tens & Ones) | Number Sense | Level 34 |
-| **L35** | `S4.8` | Class 1 | Canonical Expanded Form (2-Digit) | Number Sense | Level 35 |
-| **L36** | `S4.9` | Class 1 | Non-Canonical Regrouping (Concrete) | Number Sense | Level 36 |
-| **L37** | `S4.10` | Class 1 | Mental Addition (+1, +2) | Operations | Level 37 |
-| **L38** | `S4.11` | Class 1 | Complements of 10 | Operations | Level 38 |
-| **L39** | `S4.12` | Class 1 | Addition with Manipulatives (within 20) | Operations | Level 39 |
-| **L40** | `S4.13` | Class 1 | Subtraction as Take-Away (Concrete) | Operations | Level 40 |
-| **L41** | `S4.14` | Class 1 | Subtraction as Comparison (Concrete) | Operations | Level 41 |
-| **L42** | `S4.15` | Class 1 | Forward Number Line Jumps | Operations | Level 42 |
-| **L43** | `S5.1` | Class 2 | Backward Number Line Jumps | Operations | Level 43 |
-| **L44** | `S5.2` | Class 2 | Bridging Through 10 | Operations | Level 44 |
-| **L45** | `S5.3` | Class 2 | Single-Digit Addition Facts (Automated) | Operations | Level 45 |
-| **L46** | `S5.4` | Class 2 | 2-Digit + 1-Digit (No Regrouping) | Operations | Level 46 |
-| **L47** | `S5.5` | Class 2 | Single-Digit Subtraction Facts | Operations | Level 47 |
-| **L48** | `S5.6` | Class 2 | 2-Digit - 1-Digit (No Regrouping) | Operations | Level 48 |
-| **L49** | `S5.7` | Class 2 | 2-Digit + 2-Digit (No Regrouping) | Operations | Level 49 |
-| **L50** | `S5.8` | Class 2 | 2-Digit - 2-Digit (No Regrouping) | Operations | Level 50 |
-| **L51** | `S5.9` | Class 2 | Regrouping Concepts (10 Ones = 1 Ten) | Operations | Level 51 |
-| **L52** | `S5.10` | Class 2 | 2-Digit Addition (With Regrouping) | Operations | Level 52 |
-| **L53** | `S5.11` | Class 2 | 2-Digit Subtraction (With Decomposition) | Operations | Level 53 |
-| **L54** | `S5.12` | Class 2 | Repeated Addition as Equal Groups | Operations | Level 54 |
-| **L55** | `S5.13` | Class 2 | Skip-Counting (2, 5, 10) | Operations | Level 55 |
-| **L56** | `S5.14` | Class 2 | Multiplication Arrays (Concrete) | Operations | Level 56 |
-| **L57** | `S5.15` | Class 2 | Multiplication Facts (2, 5, 10) | Operations | Level 57 |
-| **L58** | `S5.16` | Class 2 | Fair Sharing (Equal Distribution) | Operations | Level 58 |
-| **L59** | `S5.17` | Class 2 | Measurement with Non-Standard Units | Measurement | Level 59 |
-| **L60** | `S5.18` | Class 2 | Ordering by Length/Weight | Measurement | Unmapped |
-| **L61** | `S5.19` | Class 2 | Identifying Flat & Solid Shapes | Geometry | Unmapped |
-| **L62** | `S6.1` | Class 3 | 3-Digit Reading & Writing | Number Sense | Unmapped |
-| **L63** | `S6.2` | Class 3 | 3-Digit Place Value & Expanded Form | Number Sense | Unmapped |
-| **L64** | `S6.3` | Class 3 | 3-Digit Addition (Standard Algorithm) | Operations | Unmapped |
-| **L65** | `S6.4` | Class 3 | 3-Digit Subtraction (Decomposition) | Operations | Unmapped |
-| **L66** | `S6.5` | Class 3 | Multiplication Facts (3, 4, 6) | Operations | Unmapped |
-| **L67** | `S6.6` | Class 3 | 2-Digit × 1-Digit Multiplication | Operations | Unmapped |
-| **L68** | `S6.7` | Class 3 | Division as Repeated Subtraction | Operations | Unmapped |
-| **L69** | `S6.8` | Class 3 | Division Facts (Within Tables) | Operations | Unmapped |
-| **L70** | `S6.9` | Class 3 | Equal Sharing with Remainders | Operations | Unmapped |
-| **L71** | `S6.10` | Class 3 | Unit Fractions (1/2, 1/3, 1/4) | Fractions | Unmapped |
-| **L72** | `S6.11` | Class 3 | Standard Units of Length (m, cm) | Measurement | Unmapped |
-| **L73** | `S6.12` | Class 3 | Standard Units of Mass (kg, g) | Measurement | Unmapped |
-| **L74** | `S6.13` | Class 3 | Reading Clocks (Hours & Half-Hours) | Time | Unmapped |
-| **L75** | `S6.14` | Class 3 | Money Calculations (Rupees & Paise) | Money | Unmapped |
-| **L76** | `S7.1` | Class 4 | 4-Digit Reading & Place Value | Number Sense | Unmapped |
-| **L77** | `S7.2` | Class 4 | 4-Digit Addition & Subtraction | Operations | Unmapped |
-| **L78** | `S7.3` | Class 4 | Multiplication Facts (7, 8, 9) | Operations | Unmapped |
-| **L79** | `S7.4` | Class 4 | 2-Digit × 2-Digit Multiplication | Operations | Unmapped |
-| **L80** | `S7.5` | Class 4 | 3-Digit ÷ 1-Digit Division | Operations | Unmapped |
-| **L81** | `S7.6` | Class 4 | Non-Unit Fractions (2/3, 3/4) | Fractions | Unmapped |
-| **L82** | `S7.7` | Class 4 | Like-Denominator Fraction Addition | Fractions | Unmapped |
-| **L83** | `S7.8` | Class 4 | Decimal Place Value Introduction | Decimals | Unmapped |
-| **L84** | `S7.9` | Class 4 | Perimeter of Simple Polygons | Measurement | Unmapped |
-| **L85** | `S7.10` | Class 4 | Area by Grid Counting | Measurement | Unmapped |
-| **L86** | `S7.11` | Class 4 | Time Intervals & Elapsed Time | Time | Unmapped |
-| **L87** | `S7.12` | Class 4 | Volume by Liquid Measure (L, mL) | Measurement | Unmapped |
-| **L88** | `S7.13` | Class 4 | Angles (Right, Acute, Obtuse) | Geometry | Unmapped |
-| **L89** | `S7.14` | Class 4 | Symmetry & Reflections | Geometry | Unmapped |
-| **L90** | `S7.15` | Class 4 | Pictographs & Bar Graphs | Data Handling | Unmapped |
-| **L91** | `S7.16` | Class 4 | Multi-Step Word Problems | Operations | Unmapped |
-| **L92** | `S7.17` | Class 4 | Estimation & Mental Rounding | Number Sense | Unmapped |
-| **L93** | `S7.18` | Class 4 | Number Patterns & Rules | Patterns | Unmapped |
+### Live Architecture: Tagging Content Instead of Mapping Levels
+Instead of mapping *levels to levels*, the platform tags **individual questions directly to canonical 93-level concept IDs** (`conceptId`), allowing the legacy 59 numbering space to be cleanly phased out:
+
+* **Stored Questions (Legacy Levels 22–59)**: The 1,202 concrete questions in `data/questionBank.json` carry stable, deterministic IDs (`questionId` derived from `(level, section, questionNumber)`). Through the Superadmin Question Review workflow (`frontend/src/components/panels/QuestionReviewPanel.tsx` and `backend/src/routes/questionBank.ts`), reviewers assign individual items or entire sections directly to their target 93-level `conceptId`. When mapped, the question inherits that immutable concept identity, linking directly to student assessment evidence.
+* **Procedural Generators (Legacy Levels 1–21)**: For early levels backed by procedural generators rather than static question bank items, the level itself is mapped once at the generator boundary.
+* **Auditable Retirement**: Rather than deleting obsolete items, questions can be marked with `reviewStatus: 'retired'`, preserving an auditable history of pedagogical decisions.
+* **Transparent Gap Visibility**: Content availability is measured dynamically from real tagged questions (`GET /api/question-bank/progress`), making any remaining unauthored levels among the 93 explicit and actionable.
 
 ---
 
