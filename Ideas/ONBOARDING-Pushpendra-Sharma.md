@@ -2,8 +2,8 @@
 
 **Contributor:** Pushpendra Sharma  
 **Target Milestone:** Version 1.0 Curriculum Quality Assurance & Governance  
-**Implemented Feature:** Automated Pedagogical Level-Flagging Engine ([SRS.md §6.7 & §13.2 Rule R-15](file:///d:/fln/SRS.md#L772))  
-**Document Format:** Mandatory Onboarding Specification per [README.md Rules](file:///d:/fln/README.md#L125)
+**Planned Contribution:** Automated Pedagogical Level-Flagging Engine ([SRS.md §6.7 & §13.2 Rule R-15](../SRS.md#L772))  
+**Document Format:** Mandatory Onboarding Specification per [README.md Rules](../README.md#rules)
 
 ---
 
