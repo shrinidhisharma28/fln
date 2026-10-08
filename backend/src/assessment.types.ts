@@ -63,6 +63,19 @@ export interface LevelHtmlTemplate {
   createdAt: string;
 }
 
+export interface WorksheetGenerationWindow {
+  id?: string;
+  classId?: string;
+  cycle?: CycleName;
+  schoolId?: string;
+  start: string;
+  teacherPriorityEnd: string;
+  end: string;
+  generatedByRole: UserRole | null;
+  generatedByEmail: string | null;
+  closed?: boolean;
+}
+
 export interface Worksheet {
   id: string; // Exam ID
   classId: string;
@@ -71,6 +84,7 @@ export interface Worksheet {
   schoolId: string;
   generatedByRole: UserRole;
   generatedByEmail: string;
+  generationWindow?: WorksheetGenerationWindow;
   cycle: CycleName;
   date: string;
   questions: Question[];
